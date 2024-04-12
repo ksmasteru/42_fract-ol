@@ -1,9 +1,3 @@
-#include "mlx.h"
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <strings.h>
-#include <math.h>
 #include "fractol.h"
 // Define window dimensions
 
@@ -64,7 +58,8 @@ int mouse_event(int button, int x, int y, t_draw *data) {
   if (button == 2)
   {
     mlx_clear_window(data->mlx_ptr, data->win_ptr);
-    julia_set(data, 0x00ff00);
+    //julia_set(data, 0x00ff00);
+    mandelbrot(data);
   }
   (data->x_p)[data->x_ptr] = x;
   (data->y_p)[data->y_ptr] = y;

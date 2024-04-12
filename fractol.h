@@ -32,4 +32,5 @@ t_complex addition(t_complex a, t_complex b);
 int color_pixel_julia(void *mlx_ptr, void * win_ptr, double x, double y ,int iteration);
 int get_pixel_location(double x, int n);
 int color_pixel_to_julia(void *mlx_ptr, void *win_ptr,double x , double y);
+int mandelbrot(t_draw *data);
 #endif
