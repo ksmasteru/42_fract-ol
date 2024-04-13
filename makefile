@@ -5,7 +5,7 @@ all : $(NAME)
 
 
 $(NAME): $(OBJ_FILES)
-	cc libmlx.dylib $(OBJ_FILES) -o $(NAME)
+	cc libmlx.dylib libmlx.a $(OBJ_FILES) -o $(NAME)
 %.o : %.c
 	cc -c $< -o $@
 clean:
