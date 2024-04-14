@@ -3,11 +3,11 @@
 double double_atoi(char *str)
 {
     int be_point_val;
-    int af_point_val;
+    unsigned long af_point_val;
     int sign;
     double res;
     int i;
-    int af_counter;
+    unsigned long af_counter;
 
     af_counter = 1;
     i = 0;
@@ -49,7 +49,7 @@ double double_atoi(char *str)
         return (12345674); /* handle error*/
     }
     if (af_counter != 1)
-        res = af_point_val / af_counter; /* here swtich*/
+        res = (double)af_point_val / af_counter; /* here swtich*/
     res += be_point_val;
     res *= sign;
     return (res);

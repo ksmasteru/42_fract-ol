@@ -13,11 +13,12 @@
 typedef struct s_draw{
   void *mlx_ptr;
   void *win_ptr;
-  int num_points;
-  int x_p[4];
-  int y_p[4];
-  int y_ptr;
-  int x_ptr;
+  double x_step;
+  double y_step;
+  double x_min;
+  double x_max;
+  double y_min;
+  double y_max;
   int ac;
   char **av;
 }t_draw;
@@ -36,4 +37,5 @@ int color_pixel_julia(void *mlx_ptr, void * win_ptr, double x, double y ,int ite
 int get_pixel_location(double x, int n);
 int color_pixel_to_julia(void *mlx_ptr, void *win_ptr,double x , double y);
 int mandelbrot(t_draw *data);
+int zoom_in(t_draw *data, int x, int y);
 #endif

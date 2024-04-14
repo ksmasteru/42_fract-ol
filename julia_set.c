@@ -62,24 +62,23 @@ int color_pixel_to_julia(void *mlx_ptr, void *win_ptr,double x , double y)
 int julia_set(t_draw *data, int color)
 {
 
-    double y = -2;
-    double x = -2;
+    double y = data->y_min;
+    double x = data->x_min;
     t_complex z;
     t_complex c;
     t_complex v;
-    /* make a function that should fetch c values from cla*/
     if (data->ac != 3)
         return (0);
     c.real = double_atoi((data->av)[1]);
     c.img = double_atoi((data->av)[2]);
     double magnitude;
     int i;
-    double y_step = 0.005;
-    double x_step = 0.005;
-    while (y < 2)
+    double y_step = data->y_step;
+    double x_step = data->x_step;
+    while (y < data->y_max)
     {
-        x = -2;
-        while (x < 2)
+        x = data->x_min;
+        while (x < data->x_max)
         {
             z.real = x;
             z.img = y;
