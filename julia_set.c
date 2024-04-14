@@ -67,8 +67,11 @@ int julia_set(t_draw *data, int color)
     t_complex z;
     t_complex c;
     t_complex v;
-    c.real = -0.4;
-    c.img = 0.6;
+    /* make a function that should fetch c values from cla*/
+    if (data->ac != 3)
+        return (0);
+    c.real = double_atoi((data->av)[1]);
+    c.img = double_atoi((data->av)[2]);
     double magnitude;
     int i;
     double y_step = 0.005;
