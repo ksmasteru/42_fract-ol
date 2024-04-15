@@ -11,18 +11,18 @@ int mandelbrot(t_draw *data)
     double y_step;
     int i;
     double magnitude;
-    x_step = 0.005;
-    y_step = 0.005;
-    x = -2;
-    y = -2;
+    x_step = data->x_step;
+    y_step = data->y_step;
+    x = data->x_min;
+    y = data->y_min;
     i = 0;
     z.real = 0;
     z.img = 0;
-    while(y <= 2)
+    while(y <= data->y_max)
     {
         c.img = y;
         x = -2;
-        while (x <= 2)
+        while (x <= data->x_max)
         {
             c.real = x;
             i = 0;
@@ -38,7 +38,7 @@ int mandelbrot(t_draw *data)
                 i++;
             }
             if ( i == 200)
-                color_pixel_to_julia(data->mlx_ptr, data->win_ptr, x, y);
+                color_pixel_to_julia(data, x, y);
             x = x + x_step;
         }
         y = y + y_step;

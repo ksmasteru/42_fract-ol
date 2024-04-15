@@ -33,9 +33,12 @@ t_complex power_2(t_complex a);
 t_complex substraction(t_complex a, t_complex b);
 t_complex addition(t_complex a, t_complex b);
 double double_atoi(char *str);
-int color_pixel_julia(void *mlx_ptr, void * win_ptr, double x, double y ,int iteration);
-int get_pixel_location(double x, int n);
-int color_pixel_to_julia(void *mlx_ptr, void *win_ptr,double x , double y);
+int color_pixel_julia(t_draw *data, double x, double y ,int iteration);
+int get_pixel_location(t_draw *data, double x, int n);
+int color_pixel_to_julia(t_draw *data ,double x , double y);
 int mandelbrot(t_draw *data);
 int zoom_in(t_draw *data, int x, int y);
+int zoom_in_bonus(t_draw *data, int x, int y);
+int zoom_out_bonus(t_draw *data, int x, int y);
+
 #endif

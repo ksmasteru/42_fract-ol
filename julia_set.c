@@ -1,6 +1,6 @@
 #include "fractol.h"
 
-int color_pixel_julia(void *mlx_ptr, void * win_ptr, double x, double y ,int iteration)
+int color_pixel_julia(t_draw *data, double x, double y ,int iteration)
 {
     int color;
     double x_step = 0.005;
@@ -15,48 +15,47 @@ int color_pixel_julia(void *mlx_ptr, void * win_ptr, double x, double y ,int ite
         color = 0xbfbfbf;    
     else if (iteration >= 80 && iteration <= 100)
        color = 0x999999;
-    pixel_x = get_pixel_location(x, 1);
-    pixel_y = get_pixel_location(y, 1);
+    pixel_x = get_pixel_location(data, x, 1);
+    pixel_y = get_pixel_location(data, y, 1);
     printf("pixels %d %d\n", pixel_x, pixel_y);
     color = 0xffffff;
-    mlx_pixel_put(mlx_ptr, win_ptr, pixel_x, pixel_y, color);
+    mlx_pixel_put(data->mlx_ptr, data->win_ptr, pixel_x, pixel_y, color);
 }
 
-int get_pixel_location(double x, int n)
+int get_pixel_location(t_draw *data, double x, int n)
 {
     int location;
-    double x_step = 0.005;
-    double y_step = 0.005;
+    double x_step = data->x_step;
+    double y_step = data->y_step;
     if (n == 1)
     {
         if (x < 0)
-            location = (x / x_step) + 400;
-
+            location = (x / x_step) + WIDTH / 2;
         else
-
-            location = 400 + fabs(x / x_step);
+            location = WIDTH / 2 + fabs(x / x_step);
     }   
     else
     {
         if (x > 0)
-            location = 400 - fabs(x / x_step);
+            location = (HEIGHT / 2) - fabs(x / x_step);
         else
-            location = fabs(x / x_step) + 400;
+            location = fabs(x / x_step) + (HEIGHT / 2);
     }
     return (location);
 }
-int color_pixel_to_julia(void *mlx_ptr, void *win_ptr,double x , double y)
+int color_pixel_to_julia(t_draw *data, double x , double y)
 {
-    double x_step = 0.005;
-    double y_step = 0.005;
+    double x_step = data->x_step;
+    double y_step = data->y_step;
     int pixel_x;
     int pixel_y;
     int color;
 
     color = 0xffffff;
-    pixel_x = get_pixel_location(x, 1);
-    pixel_y = get_pixel_location(y, 2);
-    mlx_pixel_put(mlx_ptr, win_ptr, pixel_x, pixel_y, color);
+    pixel_x = get_pixel_location(data, x, 1);
+    pixel_y = get_pixel_location(data, y, 2);
+    //printf("pixel_x pixel_y %d %d\n",pixel_x, pixel_y);
+    mlx_pixel_put(data->mlx_ptr, data->win_ptr, pixel_x, pixel_y, color);
 }
 
 int julia_set(t_draw *data, int color)
@@ -75,6 +74,7 @@ int julia_set(t_draw *data, int color)
     int i;
     double y_step = data->y_step;
     double x_step = data->x_step;
+    printf("x_step y_step x_min x_max y_min y_max %f %f %f %f %f %f\n",data->x_step,data->y_step,data->x_min, data->x_max, data->y_min, data->y_max);
     while (y < data->y_max)
     {
         x = data->x_min;
@@ -93,7 +93,7 @@ int julia_set(t_draw *data, int color)
                 i++;
             }
             if (i == 100)
-                color_pixel_to_julia(data->mlx_ptr, data->win_ptr, x , y);
+                color_pixel_to_julia(data, x , y);
             x = x + x_step;
         }
         y = y + y_step;
