@@ -3,11 +3,13 @@ char *ft_itoa(int n);
 void draw_circle(t_draw *data, int x_center, int y_center, int radius, int color);
 int zoom_in(t_draw *data, int x, int y)
 {
-    mlx_clear_window(data->mlx_ptr, data->win_ptr);
-  data->y_min = (data->y_min) * 0.80;
-  data->x_min = (data->x_min) * 0.80;
-  data->x_max = (data->x_max) * 0.80;
-  data->y_max = (data->y_max) * 0.80;
+  mlx_clear_window(data->mlx_ptr, data->win_ptr);
+  double zoom_ratio = get_zoom_ratio(data);
+
+  data->y_min = (data->y_min) * zoom_ratio;
+  data->x_min = (data->x_min) * zoom_ratio;
+  data->x_max = (data->x_max) * zoom_ratio;
+  data->y_max = (data->y_max) * zoom_ratio;
   data->x_step = ((data->x_max) - (data->x_min)) / WIDTH;
   data->y_step = ((data->y_max) - (data->y_min)) / HEIGHT;
   julia_set(data, 0xffffff);
@@ -61,6 +63,38 @@ double get_y_min_ratio(t_draw *data, double x, double y)
   return (y_min_ratio);
 }
 
+double get_zoom_ratio(t_draw *data)
+{
+  double zoom_ratio;
+  double x_min;
+  double y_min;
+  double x_max;
+  double y_max;
+
+  zoom_ratio = 0.7;
+  x_min = data->x_min * zoom_ratio;
+  y_min = data->y_min * zoom_ratio;
+  x_max = data->x_max * zoom_ratio;
+  y_max = data->y_max * zoom_ratio;
+  double x_step = (x_max - x_min) / WIDTH;
+  double y_step = (y_max - y_min) / HEIGHT;
+  double value1 = x_max / x_step;
+  double WIDTH1 = (double) WIDTH / 2; 
+  while (value1 != WIDTH1)
+  {
+    x_min = data->x_min * zoom_ratio;
+    y_min = data->y_min * zoom_ratio;
+    x_max = data->x_max * zoom_ratio;
+    y_max = data->y_max * zoom_ratio;
+    x_step = (x_max - x_min) / WIDTH;
+    y_step = (y_max - y_min) / HEIGHT;
+    value1 = x_max * x_step;
+    WIDTH1 = (double) WIDTH / 2;
+    zoom_ratio += 0.01;
+  }
+  printf("zoom ratio is %f", zoom_ratio);
+  return (zoom_ratio);
+}
 int zoom_in_bonus(t_draw *data, int x, int y)
 {
   mlx_clear_window(data->mlx_ptr, data->win_ptr);

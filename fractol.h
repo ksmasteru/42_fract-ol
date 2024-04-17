@@ -40,5 +40,5 @@ int mandelbrot(t_draw *data);
 int zoom_in(t_draw *data, int x, int y);
 int zoom_in_bonus(t_draw *data, int x, int y);
 int zoom_out_bonus(t_draw *data, int x, int y);
-
+double get_zoom_ratio(t_draw *data);
 #endif
