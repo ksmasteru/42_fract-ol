@@ -2,3 +2,9 @@ iteration
 shifts 80 % done
 zoom out
 using zoom in + arrow doesnt work
+
+
+optimizing julia
+
+
+ft_puit_fractal ??

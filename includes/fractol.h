@@ -27,6 +27,11 @@
 #define HEIGHT 800
 
 
+typedef struct s_complex{
+    double real;
+    double img;
+}t_complex;
+
 typedef struct s_image
 {
   void *mlx_img;
@@ -40,27 +45,23 @@ typedef struct s_draw{
   void *mlx_ptr;
   void *win_ptr;
   t_image img;
-  double x_step;
-  void  *old_img;
-  double y_step;
   double x_min;
   double x_max;
+  double x_step;
+  double y_step;
   double y_min;
-  double c_real;
+  t_complex c;
+  t_complex z;
   double shift_side;
   double shift_up;
-  double c_img;
   double y_max;
+  double iter;
   int is_julia;
   int is_mandelbrot;
   int ac;
   char **av;
 }t_draw;
 
-typedef struct s_complex{
-    double real;
-    double img;
-}t_complex;
 int julia_set(t_draw *data, int color);
 int mouse_event(int button, int x, int y, t_draw *data);
 int close_win(int keycode, t_draw *draw);
@@ -82,4 +83,5 @@ double get_zoom_ratio(t_draw *data);
 void ft_create_img(t_draw *mlx_data);
 void ft_put_fractal(int ac, char **av, t_draw *mlx_data);
 void ft_events(t_draw *mlx_data);
+int calculate_color_value(int x, int y, t_draw *data);
 #endif

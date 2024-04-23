@@ -8,35 +8,19 @@ int mouse_event(int button, int x, int y, t_draw *data) {
       zoom_in(data, 0.8);
     else
       zoom_in(data, 1.25);
-    /*t_draw data_1;
-    data_1.mlx_ptr = data->mlx_ptr;
-    data_1.win_ptr = data->win_ptr;
-    data_1.is_mandelbrot = data->is_mandelbrot;
-    data_1.is_julia = data->is_julia ;
-    data_1.x_max = data->x_max;
-    data_1.x_min = data->x_min;
-    data_1.x_step = data->x_step;
-    data_1.y_step = data->y_step;
-    data_1.y_min = data->y_min;
-    data_1.y_max = data->y_max;
-    data_1.av = data->av;
-    data_1.ac = data->ac;*/
-    /*data_1.old_img = data->img.mlx_img;*/
-    if (data->is_julia  >= 0)
+    if (data->is_julia  >= 0) /*this mf*/
     {
-        data->is_julia++;
         ft_create_img(data);
         julia_set(data, 0xffffff);
         mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
-        //ft_put_fractal(data->ac, data->av, data);
     }
-    else if (data->is_mandelbrot != -1)
+    else if (data->is_mandelbrot >= 0)
     {
-        data->is_mandelbrot++;
-        //mandelbrot(data);
+        ft_create_img(data);
+        mandelbrot(data);
+        mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
     }
   }  
-    printf("button %d was clicked at postion %d %d\n", button, x, y);
   return (0);
 }
 
@@ -48,7 +32,8 @@ int close_win(int keycode, t_draw *draw)
 
 int pressed_key_event(int keycode, t_draw *data)
 {
-  /*works but needs more optimization and be error prone*/
+  double zoom_value;
+  // works but needs more optimization and be error prone
   if (keycode == XK_Escape)
 	{
 		mlx_destroy_window(data->mlx_ptr, data->win_ptr); /* was this windos destroyed ?*/
@@ -56,65 +41,49 @@ int pressed_key_event(int keycode, t_draw *data)
 	}
   if (keycode == XK_Right || keycode == XK_Left)
   {
-    // change the x limits. ?
+    // change the x limi
+    zoom_value = data->x_max * 0.25;    
     if (keycode == XK_Right) // increase x_max and redude x_min
     {
-      if (data->x_max != 2 )
-      {
-        data->x_max += 0.2;
-        data->x_min += 0.2;
-        if (data->x_max > 2)
-          data->x_max = 2;
-      }
-        //data->shift_side += 0.25;
-      else
-        return (0);
+      data->x_max += zoom_value;
+      data->x_min += zoom_value;
+      //printf("data x_max is %.6f and data->x_min is %.6f\n", data->x_max, data->x_min);
     }
     else // reduce x_max and increase x_min
     {
-      if (data->x_min != -2)
-      {
-        data->x_min -= 0.2;
-        data->x_max -= 0.2;
-        if (data->x_min < -2)
-          data->x_min = -2;
-      }
-      else
-        return (0);
+      data->x_max -= zoom_value;
+      data->x_min -= zoom_value;
+      //printf("data x_max is %.6f and data->x_min is %.6f\n", data->x_max, data->x_min);
     }
   }
-  if (keycode == XK_Up || keycode == XK_Down)
+  else if (keycode == XK_Up || keycode == XK_Down)
   {
+    zoom_value = data->y_max * 0.25;
     if (keycode == XK_Up) /*increase y_max and decrease y_min*/
     {
-      if (data->y_max != 2)
-      {
-        data->y_max += 0.2;
-        data->y_min += 0.2;
-        if (data->y_max > 2)
-          data->y_max = 2;
-      }
-      else
-        return (0);
+      data->y_max += zoom_value;
+      data->y_min += zoom_value;
     }
-    else
-    {
-      if (data->y_min != -2)
-      {
-        data->y_max -= 0.25;
-        data->y_min -= 0.25;
-        if (data->y_min < -2)/* an errorm ight happen here if x keeps descreaignm */
-          data->y_min = -2;
-      }
       else
-        return (0);
+    {  
+      data->y_max -= zoom_value;
+      data->y_min -= zoom_value;
     }
   }
-  if (data->is_julia  >= 0) /*needs more optimization*/
+  if (keycode == XK_1)
+    data->iter += 50;
+  if (keycode == XK_2)
   {
-    data->is_julia++;
+    if (data->iter < 50)
+      data->iter -= 50;
+  }
+  if (data->is_julia  >= 0 || data->is_mandelbrot >= 0) 
+  {
     ft_create_img(data);
-    julia_set(data, 0xffffff);
+    if (data->is_julia >= 0)
+      julia_set(data, 0xffffff);
+    else
+      mandelbrot(data);
     mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
   }
 	return (0);
