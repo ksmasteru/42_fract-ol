@@ -19,6 +19,7 @@ END			= \e[0m
 SRCS		=	srcs/complex.c \
 			srcs/events.c \
 			srcs/double_atoi.c \
+			srcs/keyboard_hooks.c \
 			srcs/julia_set.c	\
 			srcs/mandelbrot.c \
 			srcs/main.c

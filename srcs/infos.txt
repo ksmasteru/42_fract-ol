@@ -8,3 +8,6 @@ optimizing julia
 
 
 ft_puit_fractal ??
+
+
+if max iteration is reached return black else return i;

@@ -154,15 +154,19 @@ void ft_put_fractal(int ac, char **av, t_draw *data)
   data->shift_up = 0;
   data->ac = ac;
   data->av = av;
-  data->iter = 100;
+  data->iter = 50;
   if (data->is_julia == 0)
   {
-    data->c = (t_complex){d_atoi(data->av[2]), d_atoi(data->av[2])};
+    data->c = (t_complex){d_atoi(data->av[2]), d_atoi(data->av[3])};
     /* it still work what calls julia ?*/
     julia_set(data, 0x00000);
   }
   else if (data->is_mandelbrot == 0)
   {
+    data->x_max = 0.47; /*this ruined the zoom and shift*/
+    data->x_min = -2;
+    data->y_max = 1.12;
+    data->y_min = -1.12;
     mandelbrot(data);
   }
   mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
@@ -178,7 +182,10 @@ void ft_events(t_draw *data)
 int main(int ac, char **av) {
     t_draw mlx_data;
     mlx_data.is_julia = -1;
+    mlx_data.scale = 0.9;
     mlx_data.is_mandelbrot = -1;
+    mlx_data.shift_value_x = 0;
+    mlx_data.shift_value_y = 0;
     if (ac == 2  || ac == 4)
     {
       if (ac == 4 &&  strcmp("julia", av[1]) == 0)

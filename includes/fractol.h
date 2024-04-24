@@ -6,7 +6,7 @@
 /*   By: dasereno <dasereno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/16 19:05:59 by darian            #+#    #+#             */
-/*   Updated: 2024/04/20 09:55:43 by hes-saqu         ###   ########.fr       */
+/*   Updated: 2024/04/24 22:31:31 by hes-saqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_complex{
     double img;
 }t_complex;
 
+
 typedef struct s_image
 {
   void *mlx_img;
@@ -47,6 +48,7 @@ typedef struct s_draw{
   t_image img;
   double x_min;
   double x_max;
+  double scale;
   double x_step;
   double y_step;
   double y_min;
@@ -54,6 +56,8 @@ typedef struct s_draw{
   t_complex z;
   double shift_side;
   double shift_up;
+    int shift_value_x;
+    int shift_value_y;
   double y_max;
   double iter;
   int is_julia;
@@ -75,7 +79,7 @@ int color_pixel_julia(t_draw *data, double x, double y ,int iteration);
 int get_pixel_location(t_draw *data, double x, int n);
 int color_pixel_to_julia(t_draw *data ,double x , double y);
 int mandelbrot(t_draw *data);
-int zoom_in(t_draw *data, double zoom_ratio);
+double zoom_in(t_draw *data, double zoom_ratio);
 double  d_atoi(char *str);
 int zoom_in_bonus(t_draw *data, int x, int y);
 int zoom_out_bonus(t_draw *data, int x, int y);
@@ -84,4 +88,5 @@ void ft_create_img(t_draw *mlx_data);
 void ft_put_fractal(int ac, char **av, t_draw *mlx_data);
 void ft_events(t_draw *mlx_data);
 int calculate_color_value(int x, int y, t_draw *data);
+void shift_view(int keycode, t_draw *data);
 #endif
