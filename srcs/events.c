@@ -6,9 +6,15 @@ int mouse_event(int button, int x, int y, t_draw *data) {
   if (button == 2 || button == 1)
   {
     if (button == 2)
-      zoom_in(data, 0.8);
+    {
+      //zoom_in(data);
+      zoom_in_bonus(x, y, button, data);
+    }
     else
-      zoom_in(data, 1.25);
+    {
+      zoom_out(data);
+      //zoom_in_bonus(data, x, y);
+    }
     if (data->is_julia  >= 0)
     {
         ft_create_img(data);
@@ -59,19 +65,47 @@ int pressed_key_event(int keycode, t_draw *data)
   }
 	return (0);
 }
-double zoom_in(t_draw *data, double zoom_ratio)
+double zoom_in(t_draw *data)
 {
-  static double scale = 1;
-  scale *= zoom_ratio;
-  printf("scale is %f\n", scale);
-  /*should protect bounds? mixming arrow and zoom might cause crash*/
-  data->y_min = (data->y_min) * zoom_ratio;
-  data->x_min = (data->x_min) * zoom_ratio;
-  data->x_max = (data->x_max) * zoom_ratio;
-  data->y_max = (data->y_max) * zoom_ratio;
-  return (scale);
-  // scale = log(4)
-}
+  double zoom_x_offset = 100 * fabs((data->x_max - data->x_min) / WIDTH);
+  double zoom_y_offset = 100 * fabs((data->y_max - data->y_min) / HEIGHT);
 
+  data->x_max = (data->x_max) - zoom_x_offset;
+  data->y_min = (data->y_min) + zoom_y_offset;
+  data->x_min = (data->x_min) + zoom_x_offset;
+  data->y_max = (data->y_max) - zoom_y_offset;
+    return (0);
+}
+double zoom_out(t_draw *data)
+{
+  double zoom_x_offset = 100 * fabs((data->x_max - data->x_min) / WIDTH);
+  double zoom_y_offset = 100 * fabs((data->x_max - data->x_min) / HEIGHT); 
+  data->x_max = (data->x_max) + zoom_x_offset;
+  data->y_min = (data->y_min) - zoom_y_offset;
+  data->x_min = (data->x_min) - zoom_x_offset;
+  data->y_max = (data->y_max) + zoom_y_offset;
+}
+double zoom_in_bonus(int x, int y, int button, t_draw *data)
+{
+  double x_max_offset;
+  double x_min_offset;
+  double y_max_offset;
+  double y_min_offset;
+
+  double x_max_ratio = get_x_max_ratio(data, x, y);
+  double x_min_ratio = get_x_min_ratio(data, x, y);
+  double y_min_ratio = get_y_min_ratio(data, x, y);
+  double y_max_ratio = get_y_max_ratio(data, x, y);
+
+  x_max_offset = 100 * x_max_ratio * fabs((data->x_max - data->x_min) / WIDTH);
+  x_min_offset = 100 * x_min_ratio * fabs((data->x_max - data->x_min) / WIDTH);
+  y_min_offset = 100 * y_max_ratio * fabs((data->y_max - data->y_min) / HEIGHT);
+  y_max_offset = 100 * y_min_ratio * fabs((data->y_max - data->y_min) / HEIGHT);
+
+  data->x_max -= x_max_offset;
+  data->x_min += x_min_offset;
+  data->y_max -= y_max_offset;
+  data->y_min += y_min_offset;
+}
 
 

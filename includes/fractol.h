@@ -79,14 +79,21 @@ int color_pixel_julia(t_draw *data, double x, double y ,int iteration);
 int get_pixel_location(t_draw *data, double x, int n);
 int color_pixel_to_julia(t_draw *data ,double x , double y);
 int mandelbrot(t_draw *data);
-double zoom_in(t_draw *data, double zoom_ratio);
+double zoom_in(t_draw *data);
+double zoom_out(t_draw *data);
 double  d_atoi(char *str);
-int zoom_in_bonus(t_draw *data, int x, int y);
-int zoom_out_bonus(t_draw *data, int x, int y);
+double zoom_in_bonus(int x, int y, int button, t_draw *data);
+int zoom_out_bonus(int button, int x, int y, t_draw *data);
 double get_zoom_ratio(t_draw *data);
 void ft_create_img(t_draw *mlx_data);
 void ft_put_fractal(int ac, char **av, t_draw *mlx_data);
 void ft_events(t_draw *mlx_data);
 int calculate_color_value(int x, int y, t_draw *data);
 void shift_view(int keycode, t_draw *data);
+void shift_view_y(int keycode , t_draw *data);
+double get_x_min_ratio(t_draw *data, double x, double y);
+double get_x_max_ratio(t_draw *data, double x, double y);
+double get_y_max_ratio(t_draw *data, double x, double y);
+double get_y_min_ratio(t_draw *data, double x, double y);
+
 #endif

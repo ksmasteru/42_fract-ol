@@ -34,7 +34,10 @@ int calculate_color_value(int x, int y, t_draw *data)
         return (0);
     return (i);
 }
-
+int ft_generat_color(int iter)
+{
+    return (((double) iter / 100 * 0x00ff00));
+}
 int julia_set(t_draw *data, int color)
 {
     int x;
@@ -50,7 +53,8 @@ int julia_set(t_draw *data, int color)
         x = (i % WIDTH);
         y = (i / WIDTH);
         a = calculate_color_value(x, y , data);
-        color = a * 0x00101010;
+        // color = ft_generat_color(a) * 2;
+        color = ((double) a / 100) * 0x00ff00 * 2;
         pixel = data->img.addrs + data->img.size_line * y + x * (data->img.bpp / 8);
         *(int *)pixel = color;                                      
     }
