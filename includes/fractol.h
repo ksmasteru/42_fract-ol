@@ -48,7 +48,6 @@ typedef struct s_draw{
   t_image img;
   double x_min;
   double x_max;
-  double scale;
   double x_step;
   double y_step;
   double y_min;
@@ -56,8 +55,6 @@ typedef struct s_draw{
   t_complex z;
   double shift_side;
   double shift_up;
-    int shift_value_x;
-    int shift_value_y;
   double y_max;
   double iter;
   int is_julia;
@@ -87,7 +84,7 @@ int zoom_out_bonus(int button, int x, int y, t_draw *data);
 double get_zoom_ratio(t_draw *data);
 void ft_create_img(t_draw *mlx_data);
 void ft_put_fractal(int ac, char **av, t_draw *mlx_data);
-void ft_events(t_draw *mlx_data);
+int ft_events(t_draw *mlx_data);
 int calculate_color_value(int x, int y, t_draw *data);
 void shift_view(int keycode, t_draw *data);
 void shift_view_y(int keycode , t_draw *data);

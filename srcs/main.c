@@ -61,10 +61,14 @@ void ft_create_img (t_draw *data)
     if (data->is_julia == 0)
       title = title_julia;
     data->win_ptr = mlx_new_window(data->mlx_ptr, WIDTH, HEIGHT, title);
+    if (!data->win_ptr)
+      return (1); /*should the error be specified ?*/
   }
   else
     mlx_destroy_image(data->mlx_ptr, data->img.mlx_img);
   data->img.mlx_img = mlx_new_image(data->mlx_ptr, WIDTH, HEIGHT);
+  if(!data->img.mlx_img)
+    return (1);
   data->img.addrs = mlx_get_data_addr(data->img.mlx_img, &data->img.bpp, &data->img.size_line, &data->img.endian);
 }
 
@@ -97,20 +101,25 @@ void ft_put_fractal(int ac, char **av, t_draw *data)
   mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
 }
 
-void ft_events(t_draw *data)
+int ft_events(t_draw *data)
 {
-    /* when to use function pointer ? */
+    data->mlx_ptr = mlx_init();
+    if (data->mlx_ptr)
+      return (1);
+    ft_create_img(data);
+    ft_put_fractal(data->ac, data->av, data);
     mlx_mouse_hook(data->win_ptr, mouse_event, data);
     mlx_hook(data->win_ptr, 17, 0, close_win, data);
     mlx_key_hook(data->win_ptr, pressed_key_event, data);
+    mlx_loop(data->mlx_ptr);
+    return (0);
 }
 int main(int ac, char **av) {
     t_draw mlx_data;
     mlx_data.is_julia = -1;
-    mlx_data.scale = 0.9;
     mlx_data.is_mandelbrot = -1;
-    mlx_data.shift_value_x = 0;
-    mlx_data.shift_value_y = 0;
+    mlx_data.ac = ac;
+    mlx_data.av = av;
     if (ac == 2  || ac == 4)
     {
       if (ac == 4 &&  strcmp("julia", av[1]) == 0)
@@ -120,13 +129,10 @@ int main(int ac, char **av) {
     }
     if (mlx_data.is_mandelbrot == 0 || mlx_data.is_julia == 0)
     {
-        mlx_data.mlx_ptr = mlx_init();
-        ft_create_img(&mlx_data); /* each function shoulld fail error*/
-        ft_put_fractal(ac, av, &mlx_data);
         ft_events(&mlx_data);
-        mlx_loop(mlx_data.mlx_ptr); /* how does mlx_loop works ? will ft_)craete_img get created again ?*/
     }
     else
       printf("Availabe parameters : \njulia real_number imaginary_number.\nmandelbrot\nnewton\n");
     return (0);
 }
+
