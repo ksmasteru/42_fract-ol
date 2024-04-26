@@ -50,7 +50,7 @@ double get_y_min_ratio(t_draw *data, double x, double y)
 }
 
 
-void ft_create_img (t_draw *data)
+int ft_create_img (t_draw *data)
 {
   char *title_mandelbrot = "Mandelbrot Fractal";
   char *title_julia = "Julia Fractal";
@@ -70,24 +70,22 @@ void ft_create_img (t_draw *data)
   if(!data->img.mlx_img)
     return (1);
   data->img.addrs = mlx_get_data_addr(data->img.mlx_img, &data->img.bpp, &data->img.size_line, &data->img.endian);
+  if(!data->img.addrs)
+    return (1);
 }
 
-
-void ft_put_fractal(int ac, char **av, t_draw *data)
+int ft_put_fractal(int ac, char **av, t_draw *data)
 {
   data->x_max = 2;
   data->y_max = 2;
   data->x_min = -2;
   data->y_min = -2;
-  data->shift_side = 0;
-  data->shift_up = 0;
-  data->ac = ac;
-  data->av = av;
   data->iter = 50;
   if (data->is_julia == 0)
   {
     data->c = (t_complex){d_atoi(data->av[2]), d_atoi(data->av[3])};
-    /* it still work what calls julia ?*/
+    if ((data->c.real >= double max) || (data->c.img >= double max))
+      return (1); /*error handle wrong input*/  
     julia_set(data, 0x00000);
   }
   else if (data->is_mandelbrot == 0)
@@ -99,27 +97,32 @@ void ft_put_fractal(int ac, char **av, t_draw *data)
     mandelbrot(data);
   }
   mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
+  return (0);
 }
-
 int ft_events(t_draw *data)
 {
     data->mlx_ptr = mlx_init();
     if (data->mlx_ptr)
       return (1);
-    ft_create_img(data);
-    ft_put_fractal(data->ac, data->av, data);
+    if (ft_create_img(data) == 1)
+      return (1);
+    if (ft_put_fractal(data->ac, data->av, data) == 1)
+      return (1);
     mlx_mouse_hook(data->win_ptr, mouse_event, data);
     mlx_hook(data->win_ptr, 17, 0, close_win, data);
     mlx_key_hook(data->win_ptr, pressed_key_event, data);
     mlx_loop(data->mlx_ptr);
     return (0);
 }
-int main(int ac, char **av) {
+int main(int ac, char **av) 
+{
     t_draw mlx_data;
+    int error_code;
+
     mlx_data.is_julia = -1;
     mlx_data.is_mandelbrot = -1;
     mlx_data.ac = ac;
-    mlx_data.av = av;
+    mlx_data.av = av;  
     if (ac == 2  || ac == 4)
     {
       if (ac == 4 &&  strcmp("julia", av[1]) == 0)
@@ -129,8 +132,9 @@ int main(int ac, char **av) {
     }
     if (mlx_data.is_mandelbrot == 0 || mlx_data.is_julia == 0)
     {
-        ft_events(&mlx_data);
-    }
+        error_code = ft_events(&mlx_data);
+        if(error_code !0)
+          handle_error(error_code); /*handle errors*/
     else
       printf("Availabe parameters : \njulia real_number imaginary_number.\nmandelbrot\nnewton\n");
     return (0);

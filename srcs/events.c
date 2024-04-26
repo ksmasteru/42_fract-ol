@@ -1,33 +1,28 @@
 #include "../includes/fractol.h"
 
-int mouse_event(int button, int x, int y, t_draw *data) {
-
-
+int mouse_event(int button, int x, int y, t_draw *data)
+{
   if (button == 2 || button == 1)
   {
     if (button == 2)
-    {
-      //zoom_in(data);
       zoom_in_bonus(x, y, button, data);
-    }
     else
-    {
       zoom_out(data);
-      //zoom_in_bonus(data, x, y);
-    }
-    if (data->is_julia  >= 0)
-    {
-        ft_create_img(data);
-        julia_set(data, 0xffffff);
-        mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
-    }
-    else if (data->is_mandelbrot >= 0)
-    {
-        ft_create_img(data);
-        mandelbrot(data);
-        mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
-    }
-  }  
+  }
+  if (data->is_julia  >= 0)
+  {
+    if (ft_create_img(data) == 1)
+      return (1);/*data should be freed*/
+    julia_set(data, 0xffffff);
+    mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
+  }
+  else if (data->is_mandelbrot >= 0)
+  {
+    if (ft_create_img(data) == 1)
+      return (1);
+    mandelbrot(data);
+    mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
+  }
   return (0);
 }
 
@@ -51,7 +46,7 @@ int pressed_key_event(int keycode, t_draw *data)
     data->iter += 50;
   if (keycode == XK_2)
   {
-    if (data->iter < 50)
+    if (data->iter > 50)
       data->iter -= 50;
   }
   if (data->is_julia  >= 0 || data->is_mandelbrot >= 0) 
