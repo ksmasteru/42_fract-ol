@@ -64,7 +64,7 @@ int	julia_set(t_draw *data, int color)
 		x = (i % WIDTH);
 		y = (i / WIDTH);
 		a = calculate_color_value(x, y, data);
-		color = ((double)a / 100) * 0x00ff00 * 2;
+		color = ((double)a / 100) * data->color_val * 2;
 		pixel = data->img.addrs + data->img.size_line * y + x * (data->img.bpp
 				/ 8);
 		*(int *)pixel = color;
